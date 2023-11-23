@@ -24,279 +24,391 @@ print('-------------------------------------------------------------------------
 ##############################################################################################
 # Teaching workload for each position - vector (a)
 a = [
-        2.0, # Pesquisador 1
-        4.0, # Pesquisador 2
-        8.0, # Pesquisador 3
-        12.0, # Pesquisador 4
-        20.0, # Professor de turno parcial
-        30.0 # Professor de turno ntegral
+        2.0, # Administrative/Researcher 1
+        4.0, # Administrative/Researcher 2
+        8.0, # Administrative/Researcher 3
+        12.0, # Administrative/Researcher 4
+        20.0, # Full-time teacher
+        30.0 # Part-time teacher
     ]
 
 ##############################################################################################
-# Carga horária de ensino de pós graduação para cada enquadramento vetor (c)
+# Workload of postgraduate teaching for each classification vector (c)
 c = [
-        2.0, # Pesquisador 1
-        4.0, # Pesquisador 2
-        4.0, # Pesquisador 3
-        4.0,  # Pesquisador 4
-        0.0,  # Professor de turno parcial
-        0.0  # Professor de turno ntegral
+        2.0, # Administrative/Researcher 1
+        4.0, # Administrative/Researcher 2
+        4.0, # Administrative/Researcher 3
+        4.0, # Administrative/Researcher 4
+        0.0, # Full-time teacher
+        0.0  # Part-time teacher
     ]
 
 ##############################################################################################
-# Número médio de alunos por turma de graduação (b)
+# Average number of students per undergraduate class (b)
 b = 30.0
-# Número médio de alunos por turma de pós graduação (d)
+# Average number of students per postgraduate class (d)
 d = 4.0
 
 ##############################################################################################
-# Cálculo dos pesos dos enquadramentos para a comparação com o numero de créditos atendidos
+# Calculation of weights for classifications for comparison with the number of credits served.
 
-# Carga horaria dos enquadramentos (che)
-che = [a[i]*b + c[i]*d for i in range(6)]
+# Workload of classifications (wfc)
+wfc = [a[i]*b + c[i]*d for i in range(6)]
 
-# Peso dos enquadramentos para o número de creditos atenditos (penca)
-penca = [9,1,1,1,1,1]
-for i in range(1,6): # cálculo de limiazação dos pesos de acordo com a carga horária
-    x = (che[5]-che[0])/(che[i]-che[0])
-    penca[i] =  9 - ((9-1)/x)
-    #penca[i] = round(penca[i], 2)
+# Weight of classifications for the number of credits served (wcncs).
+wcncs = [9,1,1,1,1,1]
+for i in range(1,6): # Calculation of weight normalization according to the workload.
+    x = (wfc[5]-wfc[0])/(wfc[i]-wfc[0])
+    wcncs[i] =  9 - ((9-1)/x)
+    #wcncs[i] = round(wcncs[i], 2)
     
-print('Carga horária dos enquadramentos para a comparação com os créditos atendidos')
-print(che)
-print('Peso de cada enquadramento relativo aos créditos atendidos')
-print(penca)
+print('Workload of classifications for comparison with the credits served.')
+print(wfc)
+print('Weight of each classification relative to the credits served.')
+print(wcncs)
 print('-----------------------------------------------------------------------------')
 
 ##############################################################################################
-# Cálculo da carga horária dos enquadramentos para a comparação com número de turmas, 
-# disciplinas e novas disciplinas
+# Calculation of the workload of classifications for comparison with the number of classes,
+# disciplines, and new disciplines
 
-# Carga horaria dos enquadramentos (che)
-che = [a[i] + c[i] for i in range(6)]
+# Workload of classifications (wfc)
+wfc = [a[i] + c[i] for i in range(6)]
 
-# Peso dos enquadramentos para o numero de turmas, disciplinas e novas disciplinas (pentdnv)
-pentdnv = [9,1,1,1,1,1]
-for i in range(1,6): # cálculo de limiazação dos pesos de acordo com a carga horaria
-    x = (che[5]-che[0])/(che[i]-che[0])
-    pentdnv[i] = 9 - ((9-1)/x)
-    #pentdnv[i]  = round(pentdnv[i], 2)
+# Weight of classifications for the number of classes, disciplines, and new disciplines (wcndnd)
+wcndnd = [9,1,1,1,1,1]
+for i in range(1,6): # Calculation of weight normalization according to workload
+    x = (wfc[5]-wfc[0])/(wfc[i]-wfc[0])
+    wcndnd[i] = 9 - ((9-1)/x)
+    #wcndnd[i]  = round(wcndnd[i], 2)
     
-print('Carga horária dos enquadramentos para a comparação com o número de turmas, disciplinas e novas disciplilinas')
-print(che)
-print('Peso de cada enquadramento relativo ao número de turmas, disciplinas e novas disciplilinas')
-print(pentdnv)
+print('Workload of classifications for comparison with the number of classes, disciplines, and new disciplines.')
+print(wfc)
+print('Weight of each classification relative to the number of classes, disciplines, and new disciplines.')
+print(wcndnd)
 print('-----------------------------------------------------------------------------')
 
 ##############################################################################################
-# Montagem da matriz da Comparação de Pares A mxm (m=11)
-# Criterios aij onde é a comparação do critério i com o j, (criterio i) / (criterio j)
-# Critérios:
-# 1 - Número de créditos atendidos (nca)
-# 2 - Número de turmas (nt)
-# 3 - Número de disciplinas (nd)
-# 4 - Número de disciplinas novas (ndn)
-# 5 - Pontuação em outras atividades (poa)
-# 6 - Enquadramento 1 - Pesquisador 1 (p1)
-# 7 - Enquadramento 2 - Pesquisador 2 (p2)
-# 8 - Enquadramento 3 - Pesquisador 3 (p3)
-# 9 - Enquadramento 4 - Pesquisador 4 (p4)
-# 10 - Enquadramento 5 - Docente de tempo integral (dti)
-# 11 - Enquadramento 6 - Docente de tempo parcial (dtp)
+# Assembly of the Pairwise Comparison Matrix A mxm (m=11)
+# Criteria aij where it is the comparison of criterion i with j, (criterion i) / (criterion j)
+# Criteria:
+# 1 - Number of credits served (nca)
+# 2 - Number of classes (nt)
+# 3 - Number of disciplines (nd)
+# 4 - Number of new disciplines (ndn)
+# 5 - Score for other activities (poa)
+# 6 - Classification 1 - Administrative/Researcher 1 (r1)
+# 7 - Classification 2 - Administrative/Researcher 2 (r2)
+# 8 - Classification 3 - Administrative/Researcher 3 (r3)
+# 9 - Classification 4 - Administrative/Researcher 4 (r4)
+# 10 - Classification 5 - Full-time faculty (ftt)
+# 11 - Classification 6 - Part-time faculty (ptt)
 
 # Inicialização da matriz A
 A = [[1.0 for x in range(11)] for x in range(11)]
 
-# Cada linha é a comparação do elemento correspondente a linha com os outros elementos
-# linha x sera composta por elementos frutos da comparação de x com os elementos 
-# correspondentes a cada coluna da matriz, x/y, x/x, x/w e assim por diante com os m elementos,
-# a comparação é feita a partir da diagona principal e depois os resultados invertidos são 
-# espelhados na diagonal principal, onde todo o elemento a(i,j) = 1/a(j,i).
+# Each line represents the comparison of the corresponding element with other elements
+# Line x is composed of elements resulting from the comparison of x with the elements
+# corresponding to each column of the matrix, x/y, x/x, x/w, and so on with the m elements,
+# the comparison is made starting from the main diagonal and then the inverted results are
+# mirrored along the main diagonal, where every element a(i,j) = 1/a(j,i).
 
-# Linha 1 - Número de créditos atendidos (nca)
+# Line 1 - Number of credits served (nca)
 A[0][0] = 1.0 # nca/nca
 A[0][1] = 1.0/5 # nca/nt
 A[0][2] = 1.0/5 # nca/nd
 A[0][3] = 1.0/9 # nca/ndn
 A[0][4] = 1.0/9 # nca/poa
-A[0][5] = 1.0/penca[0] # nca/p1
-A[0][6] = 1.0/penca[1] # nca/p2
-A[0][7] = 1.0/penca[2] # nca/p3
-A[0][8] = 1.0/penca[3] # nca/p4
-A[0][9] = 1.0/penca[4] # nca/dti
-A[0][10] = 1.0/penca[5] # nca/dtp
+A[0][5] = 1.0/wcncs[0] # nca/r1
+A[0][6] = 1.0/wcncs[1] # nca/r2
+A[0][7] = 1.0/wcncs[2] # nca/r3
+A[0][8] = 1.0/wcncs[3] # nca/r4
+A[0][9] = 1.0/wcncs[4] # nca/ftt
+A[0][10] = 1.0/wcncs[5] # nca/ptt
 
-# Linha 2 - Número de turmas (nt)
+# Line 2 - Number of classes (nt)
 A[1][1] = 1.0 # nt/nt
 A[1][2] = 3.0 # nt/nd
 A[1][3] = 1.0 # nt/ndn
 A[1][4] = 1.0/7 # nt/poa
-A[1][5] = 1.0/pentdnv[0] # nt/p1
-A[1][6] = 1.0/pentdnv[1] # nt/p2
-A[1][7] = 1.0/pentdnv[2] # nt/p3
-A[1][8] = 1.0/pentdnv[3] # nt/p4
-A[1][9] = 1.0/pentdnv[4] # nt/dti
-A[1][10] = 1.0/pentdnv[5] # nt/dtp
+A[1][5] = 1.0/wcndnd[0] # nt/r1
+A[1][6] = 1.0/wcndnd[1] # nt/r2
+A[1][7] = 1.0/wcndnd[2] # nt/r3
+A[1][8] = 1.0/wcndnd[3] # nt/r4
+A[1][9] = 1.0/wcndnd[4] # nt/ftt
+A[1][10] = 1.0/wcndnd[5] # nt/ptt
 
-# Linha 3 - Número de disciplinas (nd)
+# Line 3 - Number of disciplines (nd)
 A[2][2] = 1.0 # nd/nd
 A[2][3] = 1.0/7 # nd/ndn
 A[2][4] = 1.0/5 # nd/poa
-A[2][5] = 1.0/pentdnv[0] # nd/p1
-A[2][6] = 1.0/pentdnv[1] # nd/p2
-A[2][7] = 1.0/pentdnv[2] # nd/p3
-A[2][8] = 1.0/pentdnv[3] # nd/p4
-A[2][9] = 1.0/pentdnv[4] # nd/dti
-A[2][10] = 1.0/pentdnv[5] # nd/dtp
+A[2][5] = 1.0/wcndnd[0] # nd/r1
+A[2][6] = 1.0/wcndnd[1] # nd/r2
+A[2][7] = 1.0/wcndnd[2] # nd/r3
+A[2][8] = 1.0/wcndnd[3] # nd/r4
+A[2][9] = 1.0/wcndnd[4] # nd/ftt
+A[2][10] = 1.0/wcndnd[5] # nd/ptt
 
-# Linha 4 - Número de disciplinas novas (ndn)
+# Line 4 - Number of new disciplines (ndn)
 A[3][3] = 1.0 # ndn/ndn
 A[3][4] = 1.0 # ndn/poa
-A[3][5] = 1.0/pentdnv[0] # ndn/p1
-A[3][6] = 1.0/pentdnv[1] # ndn/p2
-A[3][7] = 1.0/pentdnv[2] # ndn/p3
-A[3][8] = 1.0/pentdnv[3] # ndn/p4
-A[3][9] = 1.0/pentdnv[4] # ndn/dti
-A[3][10] = 1.0/pentdnv[5] # ndn/dtp
+A[3][5] = 1.0/wcndnd[0] # ndn/r1
+A[3][6] = 1.0/wcndnd[1] # ndn/r2
+A[3][7] = 1.0/wcndnd[2] # ndn/r3
+A[3][8] = 1.0/wcndnd[3] # ndn/r4
+A[3][9] = 1.0/wcndnd[4] # ndn/ftt
+A[3][10] = 1.0/wcndnd[5] # ndn/ptt
 
-# Linha 5 - Pontuação em outras atividades (poa)
+# Line 5 - Score for other activities (poa)
 A[4][4] = 1.0 # poa/poa
-A[4][5] = 1.0 # poa/p1
-A[4][6] = 1.0 # poa/p2
-A[4][7] = 1.0 # poa/p3
-A[4][8] = 1.0 # poa/p4
-A[4][9] = 1.0 # poa/dti
-A[4][10] = 1.0 # poa/dtp
+A[4][5] = 1.0 # poa/r1
+A[4][6] = 1.0 # poa/r2
+A[4][7] = 1.0 # poa/r3
+A[4][8] = 1.0 # poa/r4
+A[4][9] = 1.0 # poa/ftt
+A[4][10] = 1.0 # poa/ptt
 
-# Linha 6 - Enquadramento 1 - Pesquisador 1 (p1)
-A[5][5] = pentdnv[0]/pentdnv[0] # ndn/p1
-A[5][6] = pentdnv[0]/pentdnv[1] # ndn/p2
-A[5][7] = pentdnv[0]/pentdnv[2] # ndn/p3
-A[5][8] = pentdnv[0]/pentdnv[3] # ndn/p4
-A[5][9] = pentdnv[0]/pentdnv[4] # ndn/dti
-A[5][10]= pentdnv[0]/pentdnv[5] # ndn/dtp
+# Line 6 - Classification 1 - Administrative/Researcher 1 (r1)
+A[5][5] = wcndnd[0]/wcndnd[0] # ndn/r1
+A[5][6] = wcndnd[0]/wcndnd[1] # ndn/r2
+A[5][7] = wcndnd[0]/wcndnd[2] # ndn/r3
+A[5][8] = wcndnd[0]/wcndnd[3] # ndn/r4
+A[5][9] = wcndnd[0]/wcndnd[4] # ndn/ftt
+A[5][10]= wcndnd[0]/wcndnd[5] # ndn/ptt
 
-# Linha 7 - Enquadramento 2 - Pesquisador 2 (p2)
-A[6][6] = pentdnv[1]/pentdnv[1] # ndn/p2
-A[6][7] = pentdnv[1]/pentdnv[2] # ndn/p3
-A[6][8] = pentdnv[1]/pentdnv[3] # ndn/p4
-A[6][9] = pentdnv[1]/pentdnv[4] # ndn/dti
-A[6][10] =pentdnv[1]/pentdnv[5] # ndn/dtp
+# Line 7 - Classification 2 - Administrative/Researcher 2 (r2)
+A[6][6] = wcndnd[1]/wcndnd[1] # ndn/r2
+A[6][7] = wcndnd[1]/wcndnd[2] # ndn/r3
+A[6][8] = wcndnd[1]/wcndnd[3] # ndn/r4
+A[6][9] = wcndnd[1]/wcndnd[4] # ndn/ftt
+A[6][10] =wcndnd[1]/wcndnd[5] # ndn/ptt
 
-# Linha 8 - Enquadramento 3 - Pesquisador 3 (p3)
-A[7][7] = pentdnv[2]/pentdnv[2] # ndn/p3
-A[7][8] = pentdnv[2]/pentdnv[3] # ndn/p4
-A[7][9] = pentdnv[2]/pentdnv[4] # ndn/dti
-A[7][10] = pentdnv[2]/pentdnv[5] # ndn/dtp
+# Line 8 - Classification 3 - Administrative/Researcher 3 (r3)
+A[7][7] = wcndnd[2]/wcndnd[2] # ndn/r3
+A[7][8] = wcndnd[2]/wcndnd[3] # ndn/r4
+A[7][9] = wcndnd[2]/wcndnd[4] # ndn/ftt
+A[7][10] = wcndnd[2]/wcndnd[5] # ndn/ptt
 
-# Linha 9 - Enquadramento 4 - Pesquisador 4 (p4)pentdnv[2]/pentdnv[2] # ndn/p3
-A[8][8] = pentdnv[3]/pentdnv[3] # ndn/p4
-A[8][9] = pentdnv[3]/pentdnv[4] # ndn/dti
-A[8][10] = pentdnv[3]/pentdnv[5] # ndn/dtp
+# Line 9 - Classification 4 - Administrative/Researcher 4 (r4)
+A[8][8] = wcndnd[3]/wcndnd[3] # ndn/r4
+A[8][9] = wcndnd[3]/wcndnd[4] # ndn/ftt
+A[8][10] = wcndnd[3]/wcndnd[5] # ndn/ptt
 
-# Linha 10 - Enquadramento 5 - Docente de tempo integral (dti)
-A[9][9] = pentdnv[4]/pentdnv[4] # ndn/dti
-A[9][10] = pentdnv[4]/pentdnv[5] # ndn/dtp
+# Line 10 - Classification 5 - Full-time faculty (ftt)
+A[9][9] = wcndnd[4]/wcndnd[4] # ndn/ftt
+A[9][10] = wcndnd[4]/wcndnd[5] # ndn/ptt
 
-# Linha 11 - Enquadramento 6 - Docente de tempo parcial (dtp)
-A[10][10] = pentdnv[5]/pentdnv[5] # ndn/dtp
+# Line 11 - Classification 6 - Part-time faculty (ptt)
+A[10][10] = wcndnd[5]/wcndnd[5] # ndn/ptt
 
-# Espelhamento de A pela diagonal principal
+# Mirror A along the main diagonal
 A = np.array([[1/A[n][m] if m>n else A[m][n] for n in range(11)] for m in range(11)], dtype=float)
 A_show = copy.deepcopy(A)
-# Matriz de pesos arredondados
+#  Matrix of rounded weights
 A_show = np.array([[round(A_show[m][n], 2) for n in range(11)]for m in range(11)], dtype=float)
 #A = A_show
-print('Matriz de pesos A, arredondados')
+print('Matrix of rounded weights, A.')
 print(A_show)
 print('-----------------------------------------------------------------------------')
 
 ##############################################################################################
-# Cálculo dos autovetores e autovalores
+# Calculation of eigenvectors and eigenvalues
 
 eignvalues, eignvectors = np.linalg.eig(A)
 lambda_max = eignvalues.real[0]
 eignvectors = np.array(eignvectors)
 eignvector = eignvectors[:, 0]
 normalized_eignvector = eignvector.real/sum(eignvector.real)
-print('Autovalor não nulo: {}'.format(lambda_max))
-print('Autovetor correspondente:')
+print('Non-zero eigenvalue. {}'.format(lambda_max))
+print('Corresponding eigenvector.')
 print(normalized_eignvector)
 print('-----------------------------------------------------------------------------')
 
 ##############################################################################################
-# Indice de Consistência
+#  Consistency Index
 ic = (lambda_max - 11)/(11-1)
-print('Indice de consistencia: {}'.format(ic))
+print('Consistency Index: {}'.format(ic))
 print('-----------------------------------------------------------------------------')
 
 ##############################################################################################
-# Razão de Consistência
+# Consistency Ratio
 rc = ic / 1.51
-print('Razão de consistencia: {}'.format(rc))
-print("Resultado: " + ("Consistente" if rc <= 0.1 else "Inconsistente"))
+print('Consistency Ratio: {}'.format(rc))
+print("Result: " + ("Consistent" if rc <= 0.1 else "Inconsistent"))
 print('-----------------------------------------------------------------------------')
 
 ##############################################################################################
-# Avaliação da Carga de Trabalho
-
-##########################################################################################################
-#                      Tabela para valores de referência para cada enquadramento                         #
-##########################################################################################################
-# ############################################ Adm1/Pq1 # Adm2/Pq2 # Adm3/Pq3 # Adm4/Pq4 #  DTI  #  DTP  #
-##########################################################################################################
-# No de disciplinas                          #    2     #    2     #    3     #     4    #   5   #   5   #
-##########################################################################################################
-# No de turmas                               #    2     #    2     #    3     #     4    #   4   #   8   #
-##########################################################################################################
-# Carga horária de ensino de graduação (ge)  #    2     #    4     #    8     #     12   #   20  #   30  #
-##########################################################################################################
-# Carga horária de ensino de pós-grad. (he)  #    2     #    4     #    4     #     4    #   -   #   -   #
-##########################################################################################################
-# N de créditos atendidos (ne)               #    68    #   136    #   256    #    376   #  600  #  900  #
-##########################################################################################################
-# Pontuação em outras atividades             #   180    #   160    #   140    #    120   #  100  #   50  #
-##########################################################################################################
+# Workload Assessment
+########################################################################################################
+#                      Table for reference values for each classification
+########################################################################################################
+############################################ Adm1/Re1 # Adm2/Re2 # Adm3/Re3 # Adm4/Re4 #  FTT  #  PTT  #
+########################################################################################################
+# Number of disciplines                    #    2     #    2     #    3     #    4     #   5   #   5   #
+########################################################################################################
+# Number of classes                        #    2     #    2     #    3     #    4     #   4   #   8   #
+########################################################################################################
+# Undergraduate teaching workload (ge)     #    2     #    4     #    8     #   12     #   20  #   30  #
+########################################################################################################
+# Postgraduate teaching workload (he)      #    2     #    4     #    4     #    4     #    -  #    -  #
+########################################################################################################
+# Number of credits served (ne)            #    68    #   136    #   256    #   376    #  600  #  900  #
+########################################################################################################
+# Score for other activities               #    180   #   160    #   140    #   120    #  100  #   50  #
+########################################################################################################
+# 1 - Number of credits served (nca)
+# 2 - Number of classes (nt)
+# 3 - Number of disciplines (nd)
+# 4 - Number of new disciplines (ndn)
+# 5 - Score for other activities (poa)
 w = np.array(eignvector)
 w = w/sum(w)
 #w = [round(x,2) for x in w]
 #w = w.reshape((11,1))
 # vetor de avaliação do docente (exemplo)
-# k = [ k1/k1, k2/k2, k3/k3, k4/k4, k5/k5, Pq1/Adm1, Pq2/Adm2, Pq3/Adm3, Pq4/Adm4, PTT, FTT ]
+# k = [ k1/k1, k2/k2, k3/k3, k4/k4, k5/k5, Adm1/Re1, Adm2/Re2, Adm3/Re3, Adm4/Re4, PTT, FTT ]
 fc = functions()
-# Construction of paramweters to calcualte the variation of workload for Pq3/Adm3 
+# Comparrisson
+number_of_extra_classes = False
+number_of_extra_courses = False
+variation_in_score = True
+all_categories = False
+
+# Construction of parameters to calcualte the variation of workload for Adm1/Re1 
+k1 = 68; k2 = 2; k3 = 2; k4 = 0; k5 = 180
+Adm1_Re1 = {
+    'k': [ k1, k2, k3, k4, k5 ],   
+    'position' : "Adm1/Re1",
+}
+# Construction of parameters to calcualte the variation of workload for Adm2/Re2
+k1 = 136; k2 = 3; k3 = 3; k4 = 0; k5 = 160
+Adm2_Re2 = {
+    'k': [ k1, k2, k3, k4, k5 ],
+    'position' : "Adm2/Re2",
+}
+# Construction of parameters to calcualte the variation of workload for Adm3/Re3
 k1 = 256; k2 = 3; k3 = 3; k4 = 0; k5 = 140
-k = [ k1, k2, k3, k4, k5 ]
-start = -1
-end = 2
-position = "Pq3/Adm3"
-k_position = "k3"
-x_axis, workload_adm3 = fc.get_total_workload(fc, start, end, k, position, k_position, w)
-print(workload_adm3)
-
+Adm3_Re3 = {
+    'k': [ k1, k2, k3, k4, k5 ],
+    'position' : "Adm3/Re3",
+}
+# Construction of parameters to calcualte the variation of workload for Adm4/Re4 
+k1 = 376; k2 = 4; k3 = 4; k4 = 0; k5 = 120
+Adm4_Re4 = {
+    'k': [ k1, k2, k3, k4, k5 ],
+    'position' : "Adm4/Re4",
+}
 # Construction of paramweters to calcualte the variation of workload for FTT
+k1 = 600; k2 = 4; k3 = 5; k4 = 0; k5 = 100
+ftt = {
+    'k': [ k1, k2, k3, k4, k5 ],
+    'position' : "FTT",
+}
+# Construction of paramweters to calcualte the variation of workload for PTT
 k1 = 900; k2 = 8; k3 = 5; k4 = 0; k5 = 50
-k = [ k1, k2, k3, k4, k5 ]
-start = -1
-end = 2
-position = "FTT"
-k_position = "k3"
-x_axis, workload_ftt = fc.get_total_workload(fc, start, end, k, position, k_position, w)
-print(workload_ftt)
-fig = plt.figure()
+ptt = {
+    'k': [ k1, k2, k3, k4, k5 ],
+    'position' : "PTT",
+}
 
-# Creating subplot/axes
-ax = fig.add_subplot(111)
+elements_data_list = []
 
-# Setting axes/plot title
-ax.set_title('An Axes Title')
+if number_of_extra_classes and not all_categories:
+    elements_data_list.append(Adm3_Re3)
+    elements_data_list.append(ptt)
+    range_dict = {'start':-1,'end':2}
+    k_position = 'k2'
+    # Comparrison vector calculation
+    comparisson_result_list = fc.pair_comparisson(w, range_dict, k_position, elements_data_list)
+    texts = {
+        'title': 'Variation of workload according to the variation of extra classes',
+        'y_label': 'Percenctual Workload Variation',
+        'x_label': 'Number of extra classes',
+    }
+    fc.plot_graph(comparisson_result_list, [-1, 2], [0.95, 1.1], texts)
 
-# Setting X-axis and Y-axis limits
-ax.set_xlim([-1, 2])
-ax.set_ylim([0.975, 1.05])
+if number_of_extra_courses and not all_categories:
+# Construction of parameters to calcualte the variation of workload for Pq3/Adm3 
+    elements_data_list.append(Adm3_Re3)
+    elements_data_list.append(ptt)
+    range_dict = {'start':-1,'end':2}
+    k_position = 'k3'
+    # Comparrison vector calculation
+    comparisson_result_list = fc.pair_comparisson(w, range_dict, k_position, elements_data_list)
+    texts = {
+        'title': 'Variation of workload according to the variation of extra courses',
+        'y_label': 'Percenctual Workload Variation',
+        'x_label': 'Number of extra courses',
+    }
+    fc.plot_graph(comparisson_result_list, [-1, 2], [0.95, 1.1], texts)
 
-# Setting X-axis and Y-axis labels
-ax.set_ylabel('Y-Axis Label')
-ax.set_xlabel('X-Axis Label')
-plt.plot(x_axis, workload_adm3, 'r', x_axis, workload_ftt, 'b')
-plt.show()
+if variation_in_score and not all_categories:
+# Construction of parameters to calcualte the variation of workload for Pq3/Adm3 
+    elements_data_list.append(Adm3_Re3)
+    elements_data_list.append(ptt)
+    range_dict = {'start':-20,'end':40}
+    k_position = 'k5'
+    # Comparrison vector calculation
+    comparisson_result_list = fc.pair_comparisson(w, range_dict, k_position, elements_data_list)
+    texts = {
+        'title': 'Variation of workload according to the variation of extra score',
+        'y_label': 'Percenctual Workload Variation',
+        'x_label': 'Number of extra score',
+    }
+    fc.plot_graph(comparisson_result_list, [-20, 40], [0.7, 1.5], texts)
+
+if number_of_extra_classes and all_categories:
+    elements_data_list.append(Adm1_Re1)
+    elements_data_list.append(Adm2_Re2)
+    elements_data_list.append(Adm3_Re3)
+    elements_data_list.append(Adm4_Re4)
+    elements_data_list.append(ftt)
+    elements_data_list.append(ptt)
+    range_dict = {'start':-1,'end':2}
+    k_position = 'k2'
+    # Comparrison vector calculation
+    comparisson_result_list = fc.pair_comparisson(w, range_dict, k_position, elements_data_list)
+    texts = {
+        'title': 'Variation of workload according to the variation of extra classes',
+        'y_label': 'Percenctual Workload Variation',
+        'x_label': 'Number of extra classes',
+    }
+    fc.plot_graph(comparisson_result_list, [-1, 2], [0.95, 1.1], texts)
+
+if number_of_extra_courses and all_categories:
+# Construction of parameters to calcualte the variation of workload for Pq3/Adm3 
+    elements_data_list.append(Adm1_Re1)
+    elements_data_list.append(Adm2_Re2)
+    elements_data_list.append(Adm3_Re3)
+    elements_data_list.append(Adm4_Re4)
+    elements_data_list.append(ftt)
+    elements_data_list.append(ptt)
+    range_dict = {'start':-1,'end':2}
+    k_position = 'k3'
+    # Comparrison vector calculation
+    comparisson_result_list = fc.pair_comparisson(w, range_dict, k_position, elements_data_list)
+    texts = {
+        'title': 'Variation of workload according to the variation of extra courses',
+        'y_label': 'Percenctual Workload Variation',
+        'x_label': 'Number of extra courses',
+    }
+    fc.plot_graph(comparisson_result_list, [-1, 2], [0.95, 1.1], texts)
+
+if variation_in_score and all_categories:
+# Construction of parameters to calcualte the variation of workload for Pq3/Adm3 
+    elements_data_list.append(Adm1_Re1)
+    elements_data_list.append(Adm2_Re2)
+    elements_data_list.append(Adm3_Re3)
+    elements_data_list.append(Adm4_Re4)
+    elements_data_list.append(ftt)
+    elements_data_list.append(ptt)
+    range_dict = {'start':-20,'end':40}
+    k_position = 'k5'
+    # Comparrison vector calculation
+    comparisson_result_list = fc.pair_comparisson(w, range_dict, k_position, elements_data_list)
+    texts = {
+        'title': 'Variation of workload according to the variation of extra score',
+        'y_label': 'Percenctual Workload Variation',
+        'x_label': 'Number of extra score',
+    }
+    fc.plot_graph(comparisson_result_list, [-20, 40], [0.7, 1.5], texts)

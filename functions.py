@@ -10,7 +10,7 @@
 
 #### Imports ####
 import numpy as np
-
+import matplotlib.pyplot as plt
 ##############################################################################################
 class functions():
     
@@ -68,16 +68,53 @@ class functions():
     
     def get_position_index(self, position):
         pos = position.lower()
-        if pos=="pq1/adm1":
+        if pos=="adm1/re1":
             return 5
-        if pos=="pq2/adm2":
+        if pos=="adm2/re2":
             return 6
-        if pos=="pq3/adm3":
+        if pos=="adm3/re3":
             return 7
-        if pos=="pq4/adm4":
+        if pos=="adm4/re4":
             return 8
-        if pos=="ptt":
-            return 9
         if pos=="ftt":
+            return 9
+        if pos=="ptt":
             return 10
         return None
+
+    def pair_comparisson(self,w ,range_dict, k_position, elements_data_list):
+        result_list = []
+        for element in elements_data_list:
+            k = element['k']
+            start = range_dict['start']
+            end = range_dict['end']
+            position = element['position']
+            x_axis, workload = self.get_total_workload(self, start, end, k, position, k_position, w)
+            result_list.append({'x_axis':x_axis, 'data':workload, 'label':element['position']})
+        return result_list
+
+    def plot_graph(self, data, x_limits, y_limits, texts):
+
+        fig = plt.figure()
+
+        # Creating subplot/axes
+        ax = fig.add_subplot(111)
+
+        # Setting axes/plot title
+        ax.set_title(texts['title'])
+
+        # Setting X-axis and Y-axis limits
+        ax.set_xlim(x_limits)
+        ax.set_ylim(y_limits)
+
+        # Setting X-axis and Y-axis labels
+        ax.set_xlabel(texts['x_label'])
+        ax.set_ylabel(texts['y_label'])
+
+        for element in data:
+            plt.plot(element['x_axis'], element['data'], label=element['label'])
+
+        plt.grid(True)
+
+        plt.legend()
+        plt.show()
