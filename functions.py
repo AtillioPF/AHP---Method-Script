@@ -17,11 +17,18 @@ class functions():
     @staticmethod
     def get_evaluation_vector_normalized(self, vector, k, position, value):
         k_position = self.get_k_position_index(self, position)
-        k += vector[5:]
+        k = k[:6] + vector[5:]
         vector[k_position] += value
+        # logic to maintain que number of total disciplines equally when comparing new disciplines
+        if k_position == 3:
+            vector[k_position-1] -= value
+        
         for c in range(11):
             if k[c] != 0 & c<5:
                 vector[c] = vector[c]/k[c]
+            elif k[c] == 0 & c<5:
+                vector[c] = vector[c]/1.0
+                
         return np.array(vector)
 
     @staticmethod
